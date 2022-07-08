@@ -67,6 +67,7 @@ def get_activity(client: Garmin, activity: str, date: str) -> str:
     json_dir = JSON_OUT_DIR.format(activity=activity)
     out_path = os.path.join(json_dir, f"{date}.json")
     os.makedirs(json_dir, exist_ok=True)
+
     logging.info(f"Saving `{activity}` data for {date} to `{out_path}`")
     with open(out_path, 'w') as f:
         json.dump(result, f)
@@ -87,9 +88,15 @@ def pull_data(activities: list,
         for x in range(days)
     ]
 
+    activity_jsons = {}
     for date in date_list:
         for activity in activities:
             output_json = get_activity(garmin_client, activity, date.isoformat())
+            activity_jsons.update({activity: activity_jsons.get(activity, []) + [output_json]})
+
+    results_json_loc = os.path.join(os.path.abspath('../data'), "results.json")
+    logging.info(f"Saving results to `{results_json_loc}`")
+    json.dump(activity_jsons, open(results_json_loc, 'w'))
 
 
 if __name__=='__main__':
