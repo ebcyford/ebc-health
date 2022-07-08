@@ -12,10 +12,7 @@ DEFAULT_OUT_DIR = os.path.abspath('../data')
 JSON_OUT_DIR = os.path.join(DEFAULT_OUT_DIR, "jsons", "{activity}")
 TODAY = datetime.datetime.now()
 
-API_MAP = {
-    'sleep': 'get_sleep_data',
-    'heart_rates': 'get_heart_rates'
-}
+API_MAP = json.load(open(os.path.abspath('../api_map.json')))
 
 def get_args():
     parser = argparse.ArgumentParser()

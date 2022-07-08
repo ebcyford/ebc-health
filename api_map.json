@@ -1,0 +1,7 @@
+{
+    "sleep": "get_sleep_data",
+    "heart_rates": "get_heart_rates",
+    "stress": "get_stress_data",
+    "respiration": "get_respiration_data",
+    "steps": "get_steps_data"
+}
