@@ -1,6 +1,7 @@
 import argparse
 import configparser
 import datetime
+from dateutil import parser
 import json
 import logging
 import os
@@ -31,6 +32,11 @@ def get_args():
     parser.add_argument(
         '--ini', type=str,
         help="Location of ini file with Garmin username and password",
+        default=None
+    )
+    parser.add_argument(
+        '--since', type=str,
+        help='Date since to get stats from in format MM/DD/YYYY',
         default=None
     )
     parser.add_argument(
@@ -76,17 +82,25 @@ def get_activity(client: Garmin, activity: str, date: str) -> str:
 
 
 def pull_data(activities: list,
-              days: int, 
+              days: int,
+              since: str = None,  
               username: str = None, 
               password: str = None):
     
     garmin_client = Garmin(email=username, password=password)
     garmin_client.login()
 
-    date_list = [
-        TODAY.date() - datetime.timedelta(days=x) 
-        for x in range(days)
-    ]
+    if since:
+        since_date = parser.parse(since)
+        date_list = [
+            TODAY.date() - datetime.timedelta(days=x) 
+            for x in range((TODAY - since_date).days + 1)
+        ]
+    else:
+        date_list = [
+            TODAY.date() - datetime.timedelta(days=x) 
+            for x in range(days)
+        ]
 
     activity_jsons = {}
     for date in date_list:
