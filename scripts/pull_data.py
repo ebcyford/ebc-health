@@ -5,6 +5,7 @@ from dateutil import parser
 import json
 import logging
 import os
+import sys
 
 from garminconnect import Garmin
 
@@ -132,4 +133,8 @@ if __name__=='__main__':
             'password': str(config['auth']['password'])
         })
 
-    pull_data(**arg_dict)
+    try:
+        pull_data(**arg_dict)
+    except Exception as e:
+        logging.exception(f"Data pull failed!", exc_info=e)
+        sys.exit(1)
