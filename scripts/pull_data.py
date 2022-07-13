@@ -109,11 +109,6 @@ def pull_data(activities: list,
             output_json = get_activity(garmin_client, activity, date.isoformat())
             activity_jsons.update({activity: activity_jsons.get(activity, []) + [output_json]})
 
-    results_json_loc = os.path.join(os.path.abspath('../data'), 
-                                    f"{TODAY.isoformat()}_results.json")
-    logging.info(f"Saving results to `{results_json_loc}`")
-    json.dump(activity_jsons, open(results_json_loc, 'w'))
-
 
 if __name__=='__main__':
     logging.basicConfig(level=logging.INFO)
